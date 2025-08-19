@@ -180,21 +180,26 @@ struct ContentView: View {
     private func displaySection(geometry: GeometryProxy) -> some View {
         HStack(spacing: 4) {
             HStack {
-                Text(display)
-                    .foregroundColor(currentThemeData.displayText)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
+                // Left side with display text and cursor together
+                HStack(spacing: 0) {
+                    Text(display)
+                        .foregroundColor(currentThemeData.displayText)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                     
+                    BlinkingCursor(color: currentThemeData.displayText)
+                }
+                
                 Spacer()
                 
+                // Right side with date
                 if showDate {
                     Text(Date().formatted(.dateTime.month(.abbreviated).day()))
                         .font(.system(size: 8, weight: .medium, design: .monospaced))
                         .foregroundColor(currentThemeData.displayText.opacity(0.7))
                         .transition(.opacity)
+                        .padding(.horizontal, 5)
                 }
-                
-                BlinkingCursor(color: currentThemeData.displayText)
             }
             .frame(height: geometry.size.height * 0.15)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -234,7 +239,8 @@ struct ContentView: View {
                             buttonType: getButtonType(symbol),
                             isSpecialWidth: symbol == "0" && rowIndex == 4,
                             availableHeight: (geometry.size.height * 0.65 - 10) / 5,
-                            theme: currentThemeData
+                            theme: currentThemeData,
+                            isSelected: currentOperation == symbol
                         ) {
                             buttonTapped(symbol)
                         }
@@ -285,10 +291,10 @@ struct ContentView: View {
     }
     
     func buttonTapped(_ symbol: String) {
-        WKInterfaceDevice.current().play(.click)
-        
-        if getButtonType(symbol) == .operation || symbol == "=" {
-            WKInterfaceDevice.current().play(.success)
+        if symbol == "=" {
+            WKInterfaceDevice.current().play(.retry)
+        } else {
+            WKInterfaceDevice.current().play(.click)
         }
         
         withAnimation(.easeOut(duration: 0.3)) {
@@ -446,6 +452,7 @@ struct CalculatorButton: View {
     let isSpecialWidth: Bool
     let availableHeight: CGFloat
     let theme: CalculatorTheme
+    let isSelected: Bool
     let action: () -> Void
     
     @State private var isPressed = false
@@ -468,7 +475,7 @@ struct CalculatorButton: View {
                 Text(symbol)
                     .foregroundColor(foregroundColor(for: buttonType))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(theme.buttonBackground)
+                    .background(backgroundColor(for: buttonType))
                     .clipShape(.capsule)
                     .scaleEffect(isPressed ? 1.5 : 1.0)
                 if buttonType != .operation {
@@ -485,9 +492,18 @@ struct CalculatorButton: View {
     func foregroundColor(for type: ButtonType) -> Color {
         switch type {
         case .operation:
-            return theme.operationText
+            return isSelected ? theme.displayBackground : theme.operationText
         default:
             return theme.buttonText
+        }
+    }
+    
+    func backgroundColor(for type: ButtonType) -> Color {
+        switch type {
+        case .operation:
+            return isSelected ? theme.operationText : theme.buttonBackground
+        default:
+            return theme.buttonBackground
         }
     }
 }
@@ -506,7 +522,6 @@ struct BlinkingCursor: View {
                     isVisible.toggle()
                 }
             }
-            .padding(.leading, 2)
     }
     
     init(color: Color = .black) {
