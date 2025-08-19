@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct Retro52_Watch_AppApp: App {
+struct Retro52App: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
