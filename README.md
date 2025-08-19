@@ -39,10 +39,11 @@ Install directly on your Apple Watch via the Watch app on your iPhone
 Launch and start calculating with style
 
 🎨 Screenshots
-<img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 12 28" src="https://github.com/user-attachments/assets/8c5a41fb-36c7-40d8-996f-b837d4fcad73" />
-<img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 12 30" src="https://github.com/user-attachments/assets/47d12e44-98e3-485e-94a2-ce887b57929e" />
-<img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 13 14" src="https://github.com/user-attachments/assets/10069cec-02f1-41fa-bc92-1de1c3d36f41" />
-<img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 13 18" src="https://github.com/user-attachments/assets/7ddb561d-87e8-4196-a782-49d60f7abdf6" />
+<img width="116" height="196" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 12 28" src="https://github.com/user-attachments/assets/8c5a41fb-36c7-40d8-996f-b837d4fcad73" />
+<img width="116" height="196" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 13 18" src="https://github.com/user-attachments/assets/7ddb561d-87e8-4196-a782-49d60f7abdf6" />
+<img width="116" height="196" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 12 30" src="https://github.com/user-attachments/assets/47d12e44-98e3-485e-94a2-ce887b57929e" />
+<img width="116" height="196" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 13 14" src="https://github.com/user-attachments/assets/10069cec-02f1-41fa-bc92-1de1c3d36f41" />
+
 
 
 
