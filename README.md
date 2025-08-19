@@ -43,7 +43,7 @@ Launch and start calculating with style
 <img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 12 30" src="https://github.com/user-attachments/assets/47d12e44-98e3-485e-94a2-ce887b57929e" />
 <img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 13 14" src="https://github.com/user-attachments/assets/10069cec-02f1-41fa-bc92-1de1c3d36f41" />
 <img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 13 18" src="https://github.com/user-attachments/assets/7ddb561d-87e8-4196-a782-49d60f7abdf6" />
-<img width="216" height="296" alt="Simulator Screenshot - Apple Watch Series 10 (46mm) - 2025-08-19 at 00 13 17" src="https://github.com/user-attachments/assets/113bd9eb-a2b9-4c88-99b9-f918b1d05622" />
+
 
 
 💡 Usage Tips
