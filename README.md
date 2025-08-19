@@ -64,7 +64,7 @@ Twitter: @FaultsSegSharma
 Website: https://gunisharma
 
 📄 Privacy Policy 
-[[Add your license information here]](https://gundogcodes.github.io/synthio-privacy-policy/)
+[https://gundogcodes.github.io/synthio-privacy-policy/]
 
 Download Synthio today and experience the future of wrist-based calculation.
 Made with ⚡ for Apple Watch enthusiasts
