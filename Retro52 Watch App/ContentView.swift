@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var showBootScreen = true
     @State private var currentTheme = 0
     @State private var showThemeHint = true
+    @State private var crownOffset: CGFloat = 0
     
     let themes = [
         CalculatorTheme(
@@ -109,7 +110,7 @@ struct ContentView: View {
             
             VStack(spacing: 1) {
                 headerSection
-                    .padding(.top, 4)
+                    .padding(.top, 8)
                 
                 displaySection
                 
@@ -206,7 +207,7 @@ struct ContentView: View {
                 // Right side with date
                 if showDate {
                     Text(Date().formatted(.dateTime.month(.abbreviated).day()))
-                        .font(.system(size: 7, weight: .medium, design: .monospaced))
+                        .font(.system(size: 10, weight: .medium, design: .monospaced))
                         .foregroundColor(currentThemeData.displayText.opacity(0.7))
                         .transition(.opacity)
                         .padding(.horizontal, 5)
@@ -223,19 +224,58 @@ struct ContentView: View {
             )
             
             VStack(spacing: 0.5) {
+                // Extended list for smooth scrolling effect
+                Text("G").rotationEffect(.degrees(270))
+                Text("•").rotationEffect(.degrees(270))
+                Text("5").rotationEffect(.degrees(270))
+                Text("2").rotationEffect(.degrees(270))
+                Text("0").rotationEffect(.degrees(270))
+                Text("2").rotationEffect(.degrees(270))
+                Text("•").rotationEffect(.degrees(270))
+                Text("2").rotationEffect(.degrees(270))
+                Text("5").rotationEffect(.degrees(270))
+                Text("•").rotationEffect(.degrees(270))
+                Text("O").rotationEffect(.degrees(270))
+                Text("R").rotationEffect(.degrees(270))
+                Text("T").rotationEffect(.degrees(270))
+                Text("E").rotationEffect(.degrees(270))
+                Text("R").rotationEffect(.degrees(270))
+                Text("•").rotationEffect(.degrees(270))
+                Text("O").rotationEffect(.degrees(270))
+                Text("I").rotationEffect(.degrees(270))
+                Text("H").rotationEffect(.degrees(270))
+                Text("T").rotationEffect(.degrees(270))
+                Text("N").rotationEffect(.degrees(270))
+                Text("Y").rotationEffect(.degrees(270))
                 Text("S").rotationEffect(.degrees(270))
-                Text("□").rotationEffect(.degrees(270))
-                Text("/").rotationEffect(.degrees(270))
+                Text("•").rotationEffect(.degrees(270))
                 Text("S").rotationEffect(.degrees(270))
                 Text("G").rotationEffect(.degrees(270))
             }
-            .font(.system(size: 4, weight: .bold, design: .monospaced))
+            .font(.system(size: 7, weight: .bold, design: .monospaced))
             .foregroundColor(currentThemeData.headerText)
             .multilineTextAlignment(.center)
             .frame(width: 10)
+            .offset(y: crownOffset)
+            .focusable()
+            .digitalCrownRotation($crownOffset, from: -100, through: 100, by: 1, sensitivity: .medium, isContinuous: true, isHapticFeedbackEnabled: true)
+            .onChange(of: crownOffset) { oldValue, newValue in
+                let delta = abs(newValue - oldValue)
+                if delta > 5 {
+                    WKInterfaceDevice.current().play(.click)
+                }
+                
+                // Keep the offset within reasonable bounds to create looping effect
+                if newValue > 100 {
+                    crownOffset = -100
+                } else if newValue < -100 {
+                    crownOffset = 100
+                }
+            }
+            .frame(width: 10, height: 28)
             .background(Color.black.opacity(0.4))
             .cornerRadius(2)
-            .frame(height: 28)
+            .clipped()
         }
         .padding(.horizontal, 4)
     }
@@ -374,8 +414,7 @@ struct ContentView: View {
     func percentage() {
         if let value = Double(display) {
             let result = value / 100
-            display = formatResult(result)
-            waitingForInput = true
+            display = String(result)
             hasDecimal = display.contains(".")
         }
     }
@@ -508,7 +547,7 @@ struct CalculatorButton: View {
                 // Decorative line for non-operation buttons
                 if buttonType != .operation {
                     Rectangle()
-                        .frame(width: 26, height: 0.5)
+                        .frame(width: 36, height: 0.5)
                         .foregroundColor(theme.buttonText.opacity(0.6))
                 }
             }
@@ -650,3 +689,4 @@ struct CalculatorTheme {
 #Preview {
     ContentView()
 }
+
