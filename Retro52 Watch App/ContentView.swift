@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var showDate = true
     @State private var showBootScreen = true
     @State private var currentTheme = 0
+    @State private var showThemeHint = true
     
     let themes = [
         CalculatorTheme(
@@ -63,17 +64,17 @@ struct ContentView: View {
             buttonText: Color(red: 0.7, green: 0.9, blue: 1.0),
             operationText: Color(red: 0.0, green: 0.4, blue: 1.0)
         ),
-    CalculatorTheme(
-        name: "Stainless Steel",
-        background: .white,
-        displayBackground: Color(red: 0.2, green: 0.7, blue: 1.0),
-        displayText: Color.black,
-        headerText: Color(red: 0.6, green: 0.8, blue: 1.0),
-        headerAccent: Color(red: 0.0, green: 0.5, blue: 1.0),
-        buttonBackground: .white,
-        buttonText: .blue,
-        operationText: Color(red: 0.0, green: 0.4, blue: 1.0)
-    )
+        CalculatorTheme(
+            name: "Stainless Steel",
+            background: .white,
+            displayBackground: Color(red: 0.2, green: 0.7, blue: 1.0),
+            displayText: Color.black,
+            headerText: Color(red: 0.6, green: 0.8, blue: 1.0),
+            headerAccent: Color(red: 0.0, green: 0.5, blue: 1.0),
+            buttonBackground: .white,
+            buttonText: .blue,
+            operationText: Color(red: 0.0, green: 0.4, blue: 1.0)
+        )
     ]
     
     var currentThemeData: CalculatorTheme {
@@ -106,44 +107,54 @@ struct ContentView: View {
         ZStack {
             currentThemeData.background.ignoresSafeArea(.all)
             
-            GeometryReader { geometry in
-                VStack(spacing: 2) {
-                    headerSection
-                    
-                    displaySection(geometry: geometry)
-                    
-                    Rectangle()
-                        .frame(height: 3)
-                        .foregroundStyle(.gray)
-                        .clipShape(.capsule)
+            VStack(spacing: 1) {
+                headerSection
+                    .padding(.top, 4)
+                
+                displaySection
+                
+                Rectangle()
+                    .frame(height: 1.5)
+                    .foregroundStyle(.gray)
+                    .clipShape(.capsule)
+                    .padding(.horizontal, 4)
 
-                    buttonGrid(geometry: geometry)
-                    
-                    Spacer(minLength: 0)
-                }
-                .frame(maxHeight: .infinity, alignment: .top)
+                buttonGrid
+                
+                Spacer(minLength: 2)
             }
-            .padding(.top, 16)
-            .ignoresSafeArea(.all)
-            .edgesIgnoringSafeArea(.all)
-            .navigationBarHidden(true)
-            .toolbar(.hidden, for: .navigationBar)
+            .padding(.horizontal, 2)
             .gesture(swipeGesture)
-            
-            
+            .onAppear {
+                // Show theme hint for 3 seconds after boot screen
+                if showThemeHint {
+                    display = "Swipe to change theme"
+                    showDate = false
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            if showThemeHint {
+                                display = "0"
+                                showDate = true
+                                showThemeHint = false
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
     // MARK: - View Components
     
     private var headerSection: some View {
-        HStack {
-            VStack(spacing: 4) {
+        HStack(spacing: 2) {
+            VStack(spacing: 2) {
                 BatteryIndicator()
                 
                 Text("Synthio")
                     .foregroundStyle(currentThemeData.headerText).bold()
-                    .font(.system(size: 15))
+                    .font(.system(size: 12))
             }
             
             Spacer()
@@ -152,40 +163,40 @@ struct ContentView: View {
                 Text("Water Resistant")
                 Text("Alarm Chronos")
             }
-            .font(.system(size: 8))
-            .foregroundColor(.blue)   // <-- Always blue
+            .font(.system(size: 7))
+            .foregroundColor(.blue)
             
             Spacer()
             
             Text("GS")
-                .padding(.horizontal, 10)
-                .padding(.vertical, 2)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 1)
+                .font(.system(size: 8))
                 .foregroundColor(
                     currentThemeData.name == "Classic Green" ? .yellow : currentThemeData.headerAccent
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
                         .stroke(
                             currentThemeData.name == "Classic Green" ? .yellow : currentThemeData.headerAccent,
-                            lineWidth: 1.8
+                            lineWidth: 1.2
                         )
                 )
         }
-        .frame(maxWidth: 170)
-        .font(.system(size: 10))
-        .padding(.horizontal, 8)
-        .padding(.top, 16)
+        .font(.system(size: 8))
+        .padding(.horizontal, 4)
     }
     
-    private func displaySection(geometry: GeometryProxy) -> some View {
-        HStack(spacing: 4) {
+    private var displaySection: some View {
+        HStack(spacing: 2) {
             HStack {
                 // Left side with display text and cursor together
                 HStack(spacing: 0) {
                     Text(display)
+                        .font(.system(size: 16, weight: .medium, design: .monospaced))
                         .foregroundColor(currentThemeData.displayText)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.5)
+                        .minimumScaleFactor(0.4)
                     
                     BlinkingCursor(color: currentThemeData.displayText)
                 }
@@ -195,50 +206,49 @@ struct ContentView: View {
                 // Right side with date
                 if showDate {
                     Text(Date().formatted(.dateTime.month(.abbreviated).day()))
-                        .font(.system(size: 8, weight: .medium, design: .monospaced))
+                        .font(.system(size: 7, weight: .medium, design: .monospaced))
                         .foregroundColor(currentThemeData.displayText.opacity(0.7))
                         .transition(.opacity)
                         .padding(.horizontal, 5)
                 }
             }
-            .frame(height: geometry.size.height * 0.15)
+            .frame(height: 28)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 6)
+            .padding(.leading, 4)
             .background(currentThemeData.displayBackground)
-            .cornerRadius(8)
+            .cornerRadius(6)
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color(.darkGray), lineWidth: 2)
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color(.darkGray), lineWidth: 1.5)
             )
             
-            VStack(spacing: 1) {
+            VStack(spacing: 0.5) {
                 Text("S").rotationEffect(.degrees(270))
                 Text("□").rotationEffect(.degrees(270))
                 Text("/").rotationEffect(.degrees(270))
                 Text("S").rotationEffect(.degrees(270))
                 Text("G").rotationEffect(.degrees(270))
             }
-            .font(.system(size: 5, weight: .bold, design: .monospaced))
+            .font(.system(size: 4, weight: .bold, design: .monospaced))
             .foregroundColor(currentThemeData.headerText)
             .multilineTextAlignment(.center)
-            .frame(width: 14)
+            .frame(width: 10)
             .background(Color.black.opacity(0.4))
             .cornerRadius(2)
-            .frame(height: geometry.size.height * 0.15)
+            .frame(height: 28)
         }
         .padding(.horizontal, 4)
     }
     
-    private func buttonGrid(geometry: GeometryProxy) -> some View {
-        VStack(spacing: 2) {
+    private var buttonGrid: some View {
+        VStack(spacing: 1) {
             ForEach(Array(buttons.enumerated()), id: \.offset) { rowIndex, row in
-                HStack(spacing: 2) {
+                HStack(spacing: 1) {
                     ForEach(Array(row.enumerated()), id: \.offset) { colIndex, symbol in
                         CalculatorButton(
                             symbol: symbol,
                             buttonType: getButtonType(symbol),
                             isSpecialWidth: symbol == "0" && rowIndex == 4,
-                            availableHeight: (geometry.size.height * 0.65 - 10) / 5,
                             theme: currentThemeData,
                             isSelected: currentOperation == symbol
                         ) {
@@ -247,11 +257,9 @@ struct ContentView: View {
                     }
                 }
             }
-            Rectangle()
-                .frame(height: 1)
         }
         .padding(.horizontal, 4)
-        .padding(.bottom, 4)
+        .padding(.vertical, 2)
     }
     
     private var swipeGesture: some Gesture {
@@ -261,12 +269,22 @@ struct ContentView: View {
                 
                 if gesture.translation.width > threshold {
                     // Swipe right - previous theme
+                    if showThemeHint {
+                        showThemeHint = false
+                        display = "0"
+                        showDate = true
+                    }
                     withAnimation(.easeInOut(duration: 0.3)) {
                         currentTheme = (currentTheme - 1 + themes.count) % themes.count
                     }
                     WKInterfaceDevice.current().play(.click)
                 } else if gesture.translation.width < -threshold {
                     // Swipe left - next theme
+                    if showThemeHint {
+                        showThemeHint = false
+                        display = "0"
+                        showDate = true
+                    }
                     withAnimation(.easeInOut(duration: 0.3)) {
                         currentTheme = (currentTheme + 1) % themes.count
                     }
@@ -291,6 +309,13 @@ struct ContentView: View {
     }
     
     func buttonTapped(_ symbol: String) {
+        // Dismiss theme hint if user starts interacting
+        if showThemeHint {
+            showThemeHint = false
+            display = "0"
+            showDate = true
+        }
+        
         if symbol == "=" {
             WKInterfaceDevice.current().play(.retry)
         } else {
@@ -450,7 +475,6 @@ struct CalculatorButton: View {
     let symbol: String
     let buttonType: ButtonType
     let isSpecialWidth: Bool
-    let availableHeight: CGFloat
     let theme: CalculatorTheme
     let isSelected: Bool
     let action: () -> Void
@@ -458,35 +482,39 @@ struct CalculatorButton: View {
     @State private var isPressed = false
     
     var body: some View {
-        GeometryReader { geometry in
-            Button(action: {
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.1)) {
+                isPressed = true
+            }
+            
+            action()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 withAnimation(.easeInOut(duration: 0.1)) {
-                    isPressed = true
-                }
-                
-                action()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        isPressed = false
-                    }
-                }
-            }) {
-                Text(symbol)
-                    .foregroundColor(foregroundColor(for: buttonType))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(backgroundColor(for: buttonType))
-                    .clipShape(.capsule)
-                    .scaleEffect(isPressed ? 1.5 : 1.0)
-                if buttonType != .operation {
-                    Rectangle()
-                        .frame(width: 10, height: 1)
-                        .foregroundColor(theme.buttonText)
+                    isPressed = false
                 }
             }
-            .buttonStyle(PlainButtonStyle())
+        }) {
+            VStack(spacing: 1) {
+                Text(symbol)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundColor(foregroundColor(for: buttonType))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(minHeight: 28)
+                    .background(backgroundColor(for: buttonType))
+                    .clipShape(.capsule)
+                    .scaleEffect(isPressed ? 1.2 : 1.0)
+                
+                // Decorative line for non-operation buttons
+                if buttonType != .operation {
+                    Rectangle()
+                        .frame(width: 26, height: 0.5)
+                        .foregroundColor(theme.buttonText.opacity(0.6))
+                }
+            }
         }
-        .frame(height: max(24, availableHeight - 2))
+        .buttonStyle(PlainButtonStyle())
+        .frame(maxWidth: isSpecialWidth ? .infinity : nil)
     }
     
     func foregroundColor(for type: ButtonType) -> Color {
@@ -515,7 +543,7 @@ struct BlinkingCursor: View {
     var body: some View {
         Rectangle()
             .fill(color)
-            .frame(width: 2, height: 14)
+            .frame(width: 1.5, height: 12)
             .opacity(isVisible ? 1 : 0)
             .onAppear {
                 withAnimation(Animation.easeInOut(duration: 0.6).repeatForever()) {
@@ -536,18 +564,18 @@ struct BatteryIndicator: View {
         HStack(spacing: 1) {
             Rectangle()
                 .fill(batteryColor)
-                .frame(width: max(1, CGFloat(batteryLevel) * 20), height: 3)
+                .frame(width: max(1, CGFloat(batteryLevel) * 16), height: 2.5)
             
-            if CGFloat(batteryLevel) * 20 < 20 {
+            if CGFloat(batteryLevel) * 16 < 16 {
                 Rectangle()
                     .fill(Color.gray.opacity(0.3))
-                    .frame(width: 20 - CGFloat(batteryLevel) * 20, height: 3)
+                    .frame(width: 16 - CGFloat(batteryLevel) * 16, height: 2.5)
             }
         }
-        .frame(width: 20, height: 3)
+        .frame(width: 16, height: 2.5)
         .overlay(
             RoundedRectangle(cornerRadius: 1)
-                .stroke(Color.white, lineWidth: 0.5)
+                .stroke(Color.white, lineWidth: 0.4)
         )
         .onAppear {
             updateBatteryLevel()
@@ -579,24 +607,24 @@ struct BootScreenView: View {
         ZStack {
             Color.black.ignoresSafeArea(.all)
             
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 Text("Synthio")
-                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
                     .foregroundColor(.green)
                 
                 Text("CALCULATOR")
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .foregroundColor(.green.opacity(0.7))
                 
-                HStack(spacing: 2) {
-                    ForEach(0..<8) { index in
+                HStack(spacing: 1.5) {
+                    ForEach(0..<6) { index in
                         Rectangle()
                             .fill(Color.green)
-                            .frame(width: 3, height: 3)
+                            .frame(width: 2.5, height: 2.5)
                             .opacity(0.3)
                     }
                 }
-                .padding(.top, 10)
+                .padding(.top, 8)
             }
         }
         .onAppear {
