@@ -75,6 +75,28 @@ struct ContentView: View {
             buttonBackground: .white,
             buttonText: .blue,
             operationText: Color(red: 0.0, green: 0.4, blue: 1.0)
+        ),
+        CalculatorTheme(
+            name: "Vintage Purple",
+            background: Color(red: 0.1, green: 0.0, blue: 0.1),
+            displayBackground: Color(red: 0.8, green: 0.4, blue: 1.0),
+            displayText: Color.black,
+            headerText: Color(red: 0.9, green: 0.7, blue: 1.0),
+            headerAccent: Color(red: 0.6, green: 0.0, blue: 1.0),
+            buttonBackground: Color(red: 0.2, green: 0.1, blue: 0.3),
+            buttonText: Color(red: 0.9, green: 0.7, blue: 1.0),
+            operationText: Color(red: 0.8, green: 0.2, blue: 1.0)
+        ),
+        CalculatorTheme(
+            name: "Matrix Green",
+            background: Color.black,
+            displayBackground: Color(red: 0.0, green: 0.8, blue: 0.0),
+            displayText: Color.black,
+            headerText: Color(red: 0.0, green: 1.0, blue: 0.0),
+            headerAccent: Color(red: 0.2, green: 1.0, blue: 0.2),
+            buttonBackground: Color(red: 0.0, green: 0.15, blue: 0.0),
+            buttonText: Color(red: 0.0, green: 0.9, blue: 0.0),
+            operationText: Color(red: 0.4, green: 1.0, blue: 0.4)
         )
     ]
     
