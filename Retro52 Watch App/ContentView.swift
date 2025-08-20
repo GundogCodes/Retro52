@@ -110,19 +110,19 @@ struct ContentView: View {
             
             VStack(spacing: 1) {
                 headerSection
-                    .padding(.top, 8)
+                    
                 
                 displaySection
                 
                 Rectangle()
-                    .frame(height: 1.5)
+                    .frame(height: 1)
                     .foregroundStyle(.gray)
                     .clipShape(.capsule)
                     .padding(.horizontal, 4)
 
                 buttonGrid
                 
-                Spacer(minLength: 2)
+                Spacer(minLength: 1)
             }
             .padding(.horizontal, 2)
             .gesture(swipeGesture)
@@ -194,7 +194,7 @@ struct ContentView: View {
                 // Left side with display text and cursor together
                 HStack(spacing: 0) {
                     Text(display)
-                        .font(.system(size: 16, weight: .medium, design: .monospaced))
+                        .font(.system(size: 18, weight: .medium, design: .monospaced))
                         .foregroundColor(currentThemeData.displayText)
                         .lineLimit(1)
                         .minimumScaleFactor(0.4)
@@ -213,7 +213,7 @@ struct ContentView: View {
                         .padding(.horizontal, 5)
                 }
             }
-            .frame(height: 28)
+            .frame(height: 32)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 4)
             .background(currentThemeData.displayBackground)
@@ -298,8 +298,8 @@ struct ContentView: View {
                 }
             }
         }
-        .padding(.horizontal, 4)
-        .padding(.vertical, 2)
+        .padding(.horizontal, 6)
+        .padding(.vertical, 1)
     }
     
     private var swipeGesture: some Gesture {
@@ -536,24 +536,25 @@ struct CalculatorButton: View {
         }) {
             VStack(spacing: 1) {
                 Text(symbol)
-                    .font(.system(size: 14, weight: .medium))
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundColor(foregroundColor(for: buttonType))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .frame(minHeight: 28)
+                    .frame(minHeight: 26)
                     .background(backgroundColor(for: buttonType))
                     .clipShape(.capsule)
-                    .scaleEffect(isPressed ? 1.2 : 1.0)
+                    .scaleEffect(isPressed ? 1.05 : 1.0)
                 
                 // Decorative line for non-operation buttons
                 if buttonType != .operation {
                     Rectangle()
-                        .frame(width: 36, height: 0.5)
+                        .frame(width: 28, height: 0.5)
                         .foregroundColor(theme.buttonText.opacity(0.6))
                 }
             }
         }
         .buttonStyle(PlainButtonStyle())
         .frame(maxWidth: isSpecialWidth ? .infinity : nil)
+        .frame(maxHeight: 32)
     }
     
     func foregroundColor(for type: ButtonType) -> Color {
@@ -689,4 +690,3 @@ struct CalculatorTheme {
 #Preview {
     ContentView()
 }
-
