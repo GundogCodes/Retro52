@@ -60,7 +60,7 @@ Stylish, fast, and reliable — it's the calculator you didn't know your Apple W
 📞 Support
 Having issues or suggestions? We'd love to hear from you!
 
-Email: gunishsharma20@gmail.com
+Email: business@gunisharma.com
 Twitter: @FaultsSegSharma
 Website: https://gunisharma
 
